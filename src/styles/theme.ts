@@ -12,7 +12,7 @@ export default {
     "200": "#D1F6E3",
   },
   body: {
-    "100": "#F6F9FE",
+    "100": "#EEEEEE",
   },
   font: {
     family: "Roboto, sans-serif",
