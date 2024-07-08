@@ -21,4 +21,6 @@ export const WrapperInputRadio = styled.div`
       font-size: 16px;
     }
   }
+
+  
 `;

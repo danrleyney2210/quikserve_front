@@ -2,13 +2,10 @@ import * as S from './styles'
 import { Input } from '../../components/Atomos/Input'
 
 import ImgBurgerItem from '../../assets/image/burger2.svg'
-import imgBurguer from '../../assets/image/burguer.svg'
-import imgDrink from '../../assets/image/drink.svg'
-import imgDessert from '../../assets/image/desserts.svg'
 import IconArrow from '../../assets/icons/arrowTop.svg'
 import { Template } from '../template'
 import { Modal } from '../../components/Atomos/Modal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Radio } from '../../components/Atomos/Radio'
 import { Button } from '../../components/Atomos/Button'
 import IconLess from '../../assets/icons/less.svg'
@@ -16,11 +13,30 @@ import IconPlus from '../../assets/icons/plus.svg'
 
 import IconPlusSmall from '../../assets/icons/plusLarge.svg'
 import IconLessSmall from '../../assets/icons/lessSmall.svg'
+// import { API } from '../../service/api'
+import { dataAll } from './mock'
+import { IMenu, Item, Section } from './types'
+
+
+
 
 
 
 export const Home = () => {
   const [showModalItem, setShowModalItem] = useState(true);
+  const [activeNow, setActiveNow] = useState("Burgers");
+  const [data, setData] = useState<IMenu>()
+
+  async function getAll() {
+    // const result = await API.get('')
+    // return result
+    setData(dataAll)
+  }
+
+  useEffect(() => {
+    getAll();
+
+  }, [data])
 
   return (
     <Template>
@@ -32,74 +48,50 @@ export const Home = () => {
         <S.Body>
           <S.Content>
             <S.MenuTab>
-              <div className="category">
-                <div className="icon">
-                  <img src={imgBurguer} alt="" />
-                </div>
-                <a href="#">Burguers</a>
-              </div>
+              {
+                data && data.sections.map((item: Section) => (
+                  <S.MenuGategory
+                    onClick={() => setActiveNow(item.name)}
+                    isActive={activeNow === item.name ? true : false}
+                    href={`#${item.name}`}
+                    key={item.id}
+                  >
+                    <div className="icon">
+                      <img src={item.images[0].image} alt="" />
+                    </div>
+                    <p
 
-              <div className="category">
-                <div className="icon">
-                  <img src={imgDrink} alt="" />
-                </div>
-                <a href="#">Drinks</a>
-              </div>
-
-              <div className="category">
-                <div className="icon">
-                  <img src={imgDessert} alt="" />
-                </div>
-                <a href="#">Desserts</a>
-              </div>
+                    >{item.name}</p>
+                  </S.MenuGategory>
+                ))
+              }
             </S.MenuTab>
 
             <S.ContentItens>
-              <S.HeaderItem>
-                <S.TitleItem>Burgers</S.TitleItem>
-                <img src={IconArrow} alt="" />
-              </S.HeaderItem>
+              {
+                data && data.sections.map((item: Section, index) => (
+                  <div key={index} id={item.name}>
+                    <S.HeaderItem>
+                      <S.TitleItem>{item.name}</S.TitleItem>
+                      <img src={IconArrow} alt="" />
+                    </S.HeaderItem>
 
-              <S.Item>
-                <div className='description'>
-                  <strong>Hardcore</strong>
-                  <p>180g angus beef burger, plus ribs, gruyere cheese...</p>
-                  <strong className='price'>R$33,00</strong>
-                </div>
-                <div className='img'>
-                  <img src="" alt="" />
-                </div>
-              </S.Item>
-              <S.Item>
-                <div className='description'>
-                  <strong>Hardcore</strong>
-                  <p>180g angus beef burger, plus ribs, gruyere cheese...</p>
-                  <strong className='price'>R$33,00</strong>
-                </div>
-                <div className='img'>
-                  <img src="" alt="" />
-                </div>
-              </S.Item>
-              <S.Item>
-                <div className='description'>
-                  <strong>Hardcore</strong>
-                  <p>180g angus beef burger, plus ribs, gruyere cheese...</p>
-                  <strong className='price'>R$33,00</strong>
-                </div>
-                <div className='img'>
-                  <img src="" alt="" />
-                </div>
-              </S.Item>
-              <S.Item>
-                <div className='description'>
-                  <strong>Hardcore</strong>
-                  <p>180g angus beef burger, plus ribs, gruyere cheese...</p>
-                  <strong className='price'>R$33,00</strong>
-                </div>
-                <div className='img'>
-                  <img src="" alt="" />
-                </div>
-              </S.Item>
+                    {item.items.map((i: Item) => (
+                      <S.Item>
+                        <div className='description'>
+                          <strong>{i.name}</strong>
+                          <p>{i.description}</p>
+                          <strong className='price'>R$ {i.price.toString()}</strong>
+                        </div>
+                        <div className='img'>
+                          <img src={i.images?.length ? i.images[0].image : ''} alt="" />
+                        </div>
+                      </S.Item>
+                    ))}
+                  </div>
+                ))
+              }
+
             </S.ContentItens>
           </S.Content>
 
