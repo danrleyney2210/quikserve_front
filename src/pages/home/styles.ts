@@ -74,11 +74,7 @@ export const MenuTab = styled.div`
 `;
 
 
-interface ILinkProps {
-  isActive: boolean
-}
-
-export const MenuGategory = styled.a<ILinkProps>`
+export const MenuGategory = styled.a<{ isActive: boolean }>`
   text-decoration: none;
   cursor: pointer;
   max-width: 104px;
@@ -485,6 +481,31 @@ export const ModalDetailsItem = styled.div`
   }
 
 `;
+
+
+export const Footer = styled.footer`
+  width: 100%;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+
+
+  a {
+    font-size: 16px;
+    font-weight: 700;
+    color: ${props => props.theme.primary['800']};
+  }
+`;
+
+
+export const ContentBasket = styled.div`
+  position: fixed;
+  bottom: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+`
 
 
 

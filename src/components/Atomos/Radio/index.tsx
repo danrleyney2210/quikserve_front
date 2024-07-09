@@ -3,19 +3,21 @@ import * as S from './styles'
 
 interface IinputProps extends InputHTMLAttributes<HTMLInputElement> {
   children?: React.ReactNode
+  quantity: number
+  price: string
   id?: string
 }
 
-export const Radio = ({ children, id, ...rest }: IinputProps) => {
+export const Radio = ({ children, quantity, price, id, ...rest }: IinputProps) => {
   return (
     <S.WrapperInputRadio>
       {children}
       <label htmlFor={id}>
         <div>
-          <strong>1 meat</strong>
-          <span>R$33,00</span>
+          <strong>{quantity} meat</strong>
+          <span>R$ {price}</span>
         </div>
-        <input type="radio" {...rest} />
+        <input type="radio" id={id} {...rest} />
       </label>
     </S.WrapperInputRadio>
   )

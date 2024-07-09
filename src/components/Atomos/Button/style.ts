@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-export const Button = styled.button`
-  background-color: #4F372F;
+export const Button = styled.button<{ isDisabled: boolean }>`
+  background-color: ${props => props.isDisabled ? '#ccc' : '#4F372F'};
   width: 100%;
   cursor: pointer;
   color: #fff;

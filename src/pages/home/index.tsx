@@ -16,22 +16,43 @@ import IconLessSmall from '../../assets/icons/lessSmall.svg'
 // import { API } from '../../service/api'
 import { dataAll } from './mock'
 import { IMenu, Item, Section } from './types'
-
-
-
-
+import { useNavigate } from 'react-router-dom'
+import { useLocalStorage } from '../../hooks/useLocalStorage'
 
 
 export const Home = () => {
-  const [showModalItem, setShowModalItem] = useState(true);
+  const [cart] = useLocalStorage({ storageKey: '@cart' })
+  const [showModalItem, setShowModalItem] = useState(false);
   const [activeNow, setActiveNow] = useState("Burgers");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
   const [data, setData] = useState<IMenu>()
 
+  const navigate = useNavigate()
   async function getAll() {
     // const result = await API.get('')
-    // return result
     setData(dataAll)
+    // return result
   }
+
+
+  function getDetails(id: number) {
+    if (isMobile) {
+      navigate(`/details/${id}`)
+    } else {
+      setShowModalItem(true)
+    }
+  }
+
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 800);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     getAll();
@@ -49,19 +70,17 @@ export const Home = () => {
           <S.Content>
             <S.MenuTab>
               {
-                data && data.sections.map((item: Section) => (
+                data && data.sections.map((item: Section, index: number) => (
                   <S.MenuGategory
                     onClick={() => setActiveNow(item.name)}
-                    isActive={activeNow === item.name ? true : false}
+                    isActive={activeNow === item.name}
                     href={`#${item.name}`}
-                    key={item.id}
+                    key={index}
                   >
                     <div className="icon">
                       <img src={item.images[0].image} alt="" />
                     </div>
-                    <p
-
-                    >{item.name}</p>
+                    <p>{item.name}</p>
                   </S.MenuGategory>
                 ))
               }
@@ -69,15 +88,15 @@ export const Home = () => {
 
             <S.ContentItens>
               {
-                data && data.sections.map((item: Section, index) => (
-                  <div key={index} id={item.name}>
+                data && data.sections.map((item: Section) => (
+                  <div key={item.name} id={item.name}>
                     <S.HeaderItem>
                       <S.TitleItem>{item.name}</S.TitleItem>
                       <img src={IconArrow} alt="" />
                     </S.HeaderItem>
 
                     {item.items.map((i: Item) => (
-                      <S.Item>
+                      <S.Item key={i.id} onClick={() => getDetails(i.id)}>
                         <div className='description'>
                           <strong>{i.name}</strong>
                           <p>{i.description}</p>
@@ -93,6 +112,16 @@ export const Home = () => {
               }
 
             </S.ContentItens>
+
+            {
+              cart?.products && isMobile && <S.ContentBasket>
+                <Button onClick={() => navigate('/basket')}> You basket {cart?.products?.length ?? 0}</Button>
+              </S.ContentBasket>
+            }
+
+            <S.Footer>
+              <a href="#">View allergy information</a>
+            </S.Footer>
           </S.Content>
 
 
@@ -173,11 +202,11 @@ export const Home = () => {
             </div>
 
             <div className="type">
-              <Radio name='product' />
+              <Radio name='product' quantity={1} price='33.00' />
             </div>
             <div className="type">
-              <Radio name='product'>
-              </Radio>
+              <Radio name='product' quantity={2} price='33.00' />
+
             </div>
 
             <div className="quantity">
@@ -197,7 +226,7 @@ export const Home = () => {
         </S.ModalDetailsItem>
       </Modal>
 
-    </Template>
+    </Template >
   )
 }
 

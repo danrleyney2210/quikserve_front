@@ -49,6 +49,10 @@ export const Wrapper = styled.div`
     
     .menu-hamburguer {
       display: block;
+
+      img {
+        cursor: pointer;
+      }
     }
 
     .content-mobile {
