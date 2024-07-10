@@ -69,20 +69,22 @@ link deploy : https://quikserve-front.vercel.app/
 
 ## Mobile App
 
-<h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img04.png" height="400" />
-</h1>
+<h1 align="center" >
 
-<h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img05.png" height="400" />
-</h1>
+  <img alt="resultDesktop" title="CoinSync" src=".github/img04.png" width="200" hight="500" />
 
-<h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img06.png" height="400" />
-</h1>
 
-<h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img07.png" height="400" />
+
+  <img alt="resultDesktop" title="CoinSync" src=".github/img05.png" width="200" hight="500"/>
+
+
+
+  <img alt="resultDesktop" title="CoinSync" src=".github/img06.png" width="200" hight="500" />
+
+
+
+  <img alt="resultDesktop" title="CoinSync" src=".github/img07.png" width="200" hight="500" />
+
 </h1>
 
 
