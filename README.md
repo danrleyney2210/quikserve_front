@@ -88,3 +88,40 @@ link deploy : https://quikserve-front.vercel.app/
 </h1>
 
 
+# 🛠 Technologies
+
+> Main dependencies used in the project: 🔥
+
+- Website (React + Vite + Typescript)
+
+- Styled Components - CSS-in-js
+
+- Prettier - Opinionated code formatter.
+
+- Eslint - Tool to identify and report patterns found in ECMAScript code/
+ JavaScript, with the aim of making code more consistent and avoiding bugs.
+
+- Axios - Promise-based HTTP client for node. jse the browser.
+
+
+See the file <a>package.json</a>
+
+> Utilities
+
+- Protótipo: Figma
+- Editor: Visual Studio Code
+
+
+---
+
+### 🦸 Developer 🤘
+
+<img width="120" src=".github/eu.png"/>
+
+Made with ❤️ by Danrley Ney 👋🏽 Get in touch!
+
+> Email: danrley.dev@gmail.com
+
+> www.danrley.dev
+
+> Twitter: @danrleyney
