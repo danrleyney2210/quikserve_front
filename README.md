@@ -50,7 +50,9 @@ The file [CHALLENGE.md](CHALLENGE.md) contain the instructions of the test.
 - Internationalization for times/dates
 - Internationalization for money
 
-
+## Development result
+This project was developed with React + typescript + Clean Code
+link deploy : https://quikserve-front.vercel.app/
 ## Desktop App
 
 <h1 align="center">
@@ -68,17 +70,19 @@ The file [CHALLENGE.md](CHALLENGE.md) contain the instructions of the test.
 ## Mobile App
 
 <h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img04.png" />
+  <img alt="resultDesktop" title="CoinSync" src=".github/img04.png" height="400" />
 </h1>
 
 <h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img05.png" />
+  <img alt="resultDesktop" title="CoinSync" src=".github/img05.png" height="400" />
 </h1>
 
 <h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img06.png" />
+  <img alt="resultDesktop" title="CoinSync" src=".github/img06.png" height="400" />
 </h1>
 
 <h1 align="center">
-  <img alt="resultDesktop" title="CoinSync" src=".github/img07.png" />
+  <img alt="resultDesktop" title="CoinSync" src=".github/img07.png" height="400" />
 </h1>
+
+
