@@ -1,31 +1,37 @@
 import * as S from './styles'
 import { Input } from '../../components/Atomos/Input'
 
-import ImgBurgerItem from '../../assets/image/burger2.svg'
+
 import IconArrow from '../../assets/icons/arrowTop.svg'
 import { Template } from '../template'
-import { Modal } from '../../components/Atomos/Modal'
 import { useEffect, useState } from 'react'
-import { Radio } from '../../components/Atomos/Radio'
 import { Button } from '../../components/Atomos/Button'
-import IconLess from '../../assets/icons/less.svg'
-import IconPlus from '../../assets/icons/plus.svg'
 
 import IconPlusSmall from '../../assets/icons/plusLarge.svg'
 import IconLessSmall from '../../assets/icons/lessSmall.svg'
 // import { API } from '../../service/api'
 import { dataAll } from './mock'
-import { IMenu, Item, Section } from './types'
+import { Cart, ICart, IMenu, Item, Product, Section } from './types'
 import { useNavigate } from 'react-router-dom'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { Radio } from '../../components/Atomos/Radio'
+import IconLess from '../../assets/icons/less.svg'
+import IconPlus from '../../assets/icons/plus.svg'
+import { Modal } from '../../components/Atomos/Modal'
+import IconClose from '../../assets/icons/close.svg'
 
 
 export const Home = () => {
-  const [cart] = useLocalStorage({ storageKey: '@cart' })
-  const [showModalItem, setShowModalItem] = useState(false);
+  const [cart, setCart] = useLocalStorage({ storageKey: '@cart' })
   const [activeNow, setActiveNow] = useState("Burgers");
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
+  const [typeMeat, setTypeMeat] = useState('0')
+  const [itemSelected, setItemSelected] = useState<Item>({} as Item)
   const [data, setData] = useState<IMenu>()
+  const [quantity, setQuantity] = useState(1);
+  const [showModal, setShowModal] = useState(false)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
+
+
 
   const navigate = useNavigate()
   async function getAll() {
@@ -35,17 +41,103 @@ export const Home = () => {
   }
 
 
-  function getDetails(id: number) {
-    if (isMobile) {
-      navigate(`/details/${id}`)
-    } else {
-      setShowModalItem(true)
+  function plusCart(item: Product) {
+
+    const update: Product = {
+      ...item,
+      quantity: item.quantity + 1,
+      total: (item.quantity * item.price) + item.meat
+    };
+
+    const updatedProducts = cart.products.map((i: Product) =>
+      i.id === update.id ? update : i
+    );
+
+    const result = {
+      products: updatedProducts
+    };
+
+    setCart(result);
+
+  }
+
+  function lessCart(item: Product) {
+    if (item.quantity <= 1) {
+      return;
     }
+
+    const update: Product = {
+      ...item,
+      quantity: item.quantity - 1
+    };
+
+    const updatedProducts = cart.products.map((i: Product) =>
+      i.id === update.id ? update : i
+    );
+
+    const result = {
+      products: updatedProducts
+    };
+
+    setCart(result);
+
+  }
+
+  function calculateTotal(cart: ICart): number {
+    return cart.products.reduce((acc: number, product: Product) => acc + product.total, 0);
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTypeMeat(e.target.value);
+  };
+
+
+  function getDetails(idCategory: number, id: number, product: Item) {
+    if (isMobile) {
+      navigate(`/details/${idCategory}/${id}`)
+    } else {
+      setShowModal(!showModal)
+      setItemSelected(product)
+    }
+  }
+
+  function addToCart() {
+    const newProduct: Product = {
+      id: itemSelected.id,
+      name: itemSelected.name,
+      description: itemSelected.description!,
+      quantity: quantity,
+      meat: Number(typeMeat),
+      price: itemSelected.price,
+      total: (quantity * itemSelected.price) + Number(typeMeat),
+    };
+
+    const oldCart: Cart = cart
+
+    setCart({
+      products: [
+        ...(oldCart?.products ?? []),
+        newProduct
+      ]
+    })
+
+    setShowModal(!showModal)
   }
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < 800);
   };
+
+  function plus() {
+    setQuantity((prev: number) => prev + 1)
+  }
+
+  function less() {
+    if (quantity <= 1) {
+      return
+    }
+    setQuantity((prev: number) => prev - 1)
+  }
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -53,6 +145,9 @@ export const Home = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+
+
 
   useEffect(() => {
     getAll();
@@ -96,15 +191,18 @@ export const Home = () => {
                     </S.HeaderItem>
 
                     {item.items.map((i: Item) => (
-                      <S.Item key={i.id} onClick={() => getDetails(i.id)}>
+                      <S.Item key={i.id} onClick={() => getDetails(item.id, i.id, i)}>
                         <div className='description'>
                           <strong>{i.name}</strong>
                           <p>{i.description}</p>
                           <strong className='price'>R$ {i.price.toString()}</strong>
                         </div>
-                        <div className='img'>
-                          <img src={i.images?.length ? i.images[0].image : ''} alt="" />
-                        </div>
+                        {
+                          i.images && <div className='img'>
+                            <img src={i.images[0].image} alt="" />
+                          </div>
+                        }
+
                       </S.Item>
                     ))}
                   </div>
@@ -130,70 +228,75 @@ export const Home = () => {
               <h1>Carrinho</h1>
             </header>
 
-            {/* <div className='content-text'>
-              <p>Seu Carrinho está vazio</p>
-            </div> */}
+            {
+              cart ? (
+                <div className="itens">
+                  <div className="itens-selected">
+                    {cart.products.map((item: Product, index: number) => (
+                      <div className='item' key={index}>
+                        <div className='description'>
+                          <p>{item.name}</p>
+                          <div className='content-btn'>
+                            <button onClick={() => lessCart(item)}>
+                              <img src={IconPlusSmall} alt="" />
+                            </button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => plusCart(item)}>
+                              <img src={IconLessSmall} alt="" />
+                            </button>
+                          </div>
+                        </div>
 
-            <div className="itens">
-              <div className="itens-selected">
-                <div className='item'>
-                  <div className='description'>
-                    <p>Caipirinha</p>
-                    <div className='content-btn'>
-                      <button>
-                        <img src={IconPlusSmall} alt="" />
-                      </button>
-                      <span>1</span>
-                      <button>
-                        <img src={IconLessSmall} alt="" />
-                      </button>
-                    </div>
+                        <strong>R$ {item.price}</strong>
+                      </div>
+                    ))
+                    }
+
+
+
                   </div>
-
-                  <strong>R$13,00</strong>
-                </div>
-
-                <div className='item'>
-                  <div className='description'>
-                    <p>Caipirinha</p>
-                    <small>Com 2 carnes </small>
-                    <div className='content-btn'>
-                      <button>
-                        <img src={IconPlusSmall} alt="" />
-                      </button>
-                      <span>1</span>
-                      <button>
-                        <img src={IconLessSmall} alt="" />
-                      </button>
-                    </div>
+                  <div className="sub-total">
+                    <p>Sub Total</p>
+                    <strong>R$ {calculateTotal(cart)}</strong>
                   </div>
-
-                  <strong>R$13,00</strong>
+                  <div className="total">
+                    <p>Total: </p>
+                    <strong>R$ {calculateTotal(cart)}</strong>
+                  </div>
                 </div>
+              ) : (
 
-              </div>
-              <div className="sub-total">
-                <p>Sub Total</p>
-                <strong>£22.50</strong>
-              </div>
-              <div className="total">
-                <p>Total: </p>
-                <strong>£22.50</strong>
-              </div>
-            </div>
+                <div className='content-text'>
+                  <p>Seu Carrinho está vazio</p>
+                </div>
+              )
+            }
+
+
+
           </S.Cart>
         </S.Body>
       </S.WrapperMain>
 
-      <Modal isOpen={showModalItem} onClose={() => setShowModalItem(!showModalItem)}>
-        <S.ModalDetailsItem>
+      <Modal isOpen={showModal} onClose={() => console.log('asdasdasds')}>
+        <S.ContentItem>
           <div className="content-img">
-            <img src={ImgBurgerItem} alt="" />
+            {
+              itemSelected.images ? (<img src={itemSelected.images[0].image} alt="" />) : (
+                <S.NotImage>
+                  <p>Not Image</p>
+                </S.NotImage>
+              )
+            }
+            <div className="btn-close" onClick={() => navigate('/')}>
+              <img src={IconClose} alt="" />
+            </div>
+
           </div>
           <div className="description">
             <header>
-              <h3>Smash Brooks</h3>
-              <p>100g pressed hamburger, mozzarella cheese, pickles, red onion, grilled bacon and traditional Heinz mayonnaise.</p>
+              <h3>{itemSelected.name}</h3>
+              <p>{itemSelected.description}</p>
             </header>
 
             <div className="choose">
@@ -202,31 +305,38 @@ export const Home = () => {
             </div>
 
             <div className="type">
-              <Radio name='product' quantity={1} price='33.00' />
+              <Radio name='product' quantity={1} price='33.00' value={33.00} onChange={handleChange} />
             </div>
             <div className="type">
-              <Radio name='product' quantity={2} price='33.00' />
+              <Radio name='product' quantity={2} price='35.00' value={35.00} onChange={handleChange} />
+
+            </div>
+            <div className="type">
+              <Radio name='product' quantity={3} price='37.00' value={37.00} onChange={handleChange} />
 
             </div>
 
             <div className="quantity">
               <div className='buttons'>
-                <button className='less'>
+                <button className='less' onClick={() => less()}>
                   <img src={IconLess} alt="" />
                 </button>
-                <span>1</span>
-                <button className='plus'>
+                <span>{quantity}</span>
+                <button className='plus' onClick={() => plus()}>
                   <img src={IconPlus} alt="" />
                 </button>
               </div>
-              <Button>Add to Order * $11.75</Button>
+              <Button
+                onClick={() => addToCart()}
+                disabled={!(Number(typeMeat) > 0)}
+              >Add to Order  $ {(quantity * itemSelected.price) + Number(typeMeat)}</Button>
             </div>
           </div>
 
-        </S.ModalDetailsItem>
+        </S.ContentItem>
       </Modal>
 
-    </Template >
+    </Template>
   )
 }
 

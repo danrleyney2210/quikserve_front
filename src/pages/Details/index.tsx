@@ -1,37 +1,30 @@
 import { Radio } from '../../components/Atomos/Radio'
-import ImgBurgerItem from '../../assets/image/burger2.svg'
 import IconLess from '../../assets/icons/less.svg'
 import IconPlus from '../../assets/icons/plus.svg'
 import * as S from './styles'
 import { Button } from '../../components/Atomos/Button'
 import IconClose from '../../assets/icons/close.svg'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 // import { dataAll } from '../home/mock'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
+import { dataAll } from '../home/mock'
+import { Cart, Product } from '../home/types'
 
 
-interface Product {
-  name: string;
-  quantity: number;
-  meat: number;
-  price: number;
-  total: number
-}
 
-interface Cart {
-  products: Product[];
-}
 
 export const Details = () => {
   const [cart, setCart] = useLocalStorage({ storageKey: '@cart', initialValue: '' })
   const [typeMeat, setTypeMeat] = useState('0')
+  // const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
+
 
   const [quantity, setQuantity] = useState(1);
-  const [price] = useState(17)
   const navigate = useNavigate()
 
-
+  const { idCategory, id } = useParams()
+  const findItem = dataAll.sections.find((i) => i.id === Number(idCategory))!.items.find((i) => i.id === Number(id))!
 
   function plus() {
     setQuantity((prev: number) => prev + 1)
@@ -46,11 +39,13 @@ export const Details = () => {
 
   function addToCart() {
     const newProduct: Product = {
-      name: 'Teste',
+      id: findItem.id,
+      name: findItem.name,
+      description: findItem.description!,
       quantity: quantity,
       meat: Number(typeMeat),
-      price: 33,
-      total: (quantity * price) + Number(typeMeat),
+      price: findItem.price,
+      total: (quantity * findItem.price) + Number(typeMeat),
     };
 
     const oldCart: Cart = cart
@@ -62,7 +57,6 @@ export const Details = () => {
       ]
     })
 
-
     navigate('/');
   }
 
@@ -71,18 +65,31 @@ export const Details = () => {
     setTypeMeat(e.target.value);
   };
 
+
+  // const handleResize = () => {
+  //   setIsMobile(window.innerWidth < 800);
+  // };
+
   // useEffect(() => {
-  //   const result = dataAll.sections.find((i) => {
-  //     const result = i.items.find
-  //   })
-  // }, [])
+  //   window.addEventListener('resize', handleResize);
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, []);
 
 
   return (
     <S.Wrapper>
       <S.ContentItem>
         <div className="content-img">
-          <img src={ImgBurgerItem} alt="" />
+          {
+            findItem.images ? (<img src={findItem.images[0].image} alt="" />) : (
+              <S.NotImage>
+                <p>Not Image</p>
+              </S.NotImage>
+            )
+          }
+
           <div className="btn-close" onClick={() => navigate('/')}>
             <img src={IconClose} alt="" />
           </div>
@@ -90,8 +97,8 @@ export const Details = () => {
         </div>
         <div className="description">
           <header>
-            <h3>Smash Brooks</h3>
-            <p>100g pressed hamburger, mozzarella cheese, pickles, red onion, grilled bacon and traditional Heinz mayonnaise.</p>
+            <h3>{findItem.name}</h3>
+            <p>{findItem.description}</p>
           </header>
 
           <div className="choose">
@@ -124,11 +131,13 @@ export const Details = () => {
             <Button
               onClick={() => addToCart()}
               disabled={!(Number(typeMeat) > 0)}
-            >Add to Order  $ {(quantity * price) + Number(typeMeat)}</Button>
+            >Add to Order  $ {(quantity * findItem.price) + Number(typeMeat)}</Button>
           </div>
         </div>
 
       </S.ContentItem>
+
+
     </S.Wrapper>
   )
 }

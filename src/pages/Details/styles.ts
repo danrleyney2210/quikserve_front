@@ -3,15 +3,17 @@ import styled from "styled-components";
 export const Wrapper = styled.div``;
 
 export const ContentItem = styled.div`
-  max-width: 480px;
+
   width: 100%;
   height: 100%;
 
   .content-img {
     position: relative;
+    
 
     img {
       width: 100%;
+     
     }
 
     .btn-close {
@@ -136,4 +138,10 @@ export const ContentItem = styled.div`
     }
   }
 
+`;
+
+export const NotImage = styled.div`
+  width: 100%;
+  height: 265px;
+  background-color: #ccc;
 `;

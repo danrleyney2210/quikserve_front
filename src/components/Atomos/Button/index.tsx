@@ -3,12 +3,11 @@ import * as S from './style'
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
-  disabled?: boolean
 }
 
-export const Button: React.FC<IProps> = ({ children, disabled, ...rest }: IProps) => {
+export const Button: React.FC<IProps> = ({ children, ...rest }: IProps) => {
   return (
-    <S.Button isDisabled={disabled ?? false} {...rest}>{children}</S.Button>
+    <S.Button {...rest}>{children}</S.Button>
   )
 }
 

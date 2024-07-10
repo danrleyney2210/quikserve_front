@@ -60,3 +60,21 @@ export interface Item2 {
   available: boolean
   qty?: number
 }
+
+export interface Product {
+  id: number
+  name: string;
+  quantity: number;
+  description: string;
+  meat: number;
+  price: number;
+  total: number
+}
+
+export interface Cart {
+  products: Item[];
+}
+
+export interface ICart {
+  products: Product[];
+}
