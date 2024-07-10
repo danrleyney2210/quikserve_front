@@ -18,6 +18,7 @@ export const Radio = ({ children, quantity, price, id, ...rest }: IinputProps) =
           <span>R$ {price}</span>
         </div>
         <input type="radio" id={id} {...rest} />
+        <span className='btn-radio'></span>
       </label>
     </S.WrapperInputRadio>
   )

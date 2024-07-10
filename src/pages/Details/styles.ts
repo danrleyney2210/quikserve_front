@@ -5,6 +5,7 @@ export const Wrapper = styled.div``;
 export const ContentItem = styled.div`
   max-width: 480px;
   width: 100%;
+  height: 100%;
 
   .content-img {
     position: relative;

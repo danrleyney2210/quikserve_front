@@ -23,11 +23,6 @@ interface Cart {
   products: Product[];
 }
 
-// const initialCartValue = JSON.stringify({
-//   products: []
-// });
-
-
 export const Details = () => {
   const [cart, setCart] = useLocalStorage({ storageKey: '@cart', initialValue: '' })
   const [typeMeat, setTypeMeat] = useState('0')
