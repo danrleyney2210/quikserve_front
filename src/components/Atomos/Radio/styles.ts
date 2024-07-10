@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const WrapperInputRadio = styled.div`
   width: 100%;
   label {
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     

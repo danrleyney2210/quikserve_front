@@ -649,6 +649,15 @@ export const NotImage = styled.div`
   width: 100%;
   height: 265px;
   background-color: #ccc;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    color: #333;
+    font-weight: 600;
+  }
 `;
 
 

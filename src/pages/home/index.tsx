@@ -96,7 +96,7 @@ export const Home = () => {
     if (isMobile) {
       navigate(`/details/${idCategory}/${id}`)
     } else {
-      setShowModal(!showModal)
+      setShowModal(true)
       setItemSelected(product)
     }
   }
@@ -252,8 +252,6 @@ export const Home = () => {
                     ))
                     }
 
-
-
                   </div>
                   <div className="sub-total">
                     <p>Sub Total</p>
@@ -272,13 +270,11 @@ export const Home = () => {
               )
             }
 
-
-
           </S.Cart>
         </S.Body>
       </S.WrapperMain>
 
-      <Modal isOpen={showModal} onClose={() => console.log('asdasdasds')}>
+      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <S.ContentItem>
           <div className="content-img">
             {
