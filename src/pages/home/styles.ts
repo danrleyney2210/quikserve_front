@@ -298,7 +298,9 @@ export const Content = styled.div`
 `;
 
 
-export const ContentItens = styled.div``;
+export const ContentItens = styled.div`
+  cursor: pointer;
+`;
 
 export const TitleItem = styled.p`
   font-size: 24px;

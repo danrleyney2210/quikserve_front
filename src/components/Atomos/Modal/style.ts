@@ -58,7 +58,8 @@ export const Modal = styled.div`
     width: 28px;
     border-radius: 50%;
     z-index: 1000;
-    }
+    cursor: pointer;
+  }
 `;
 
 
