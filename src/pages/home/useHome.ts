@@ -77,6 +77,8 @@ export const useHome = () => {
     if (isMobile) {
       navigate(`/details/${idCategory}/${id}`)
     } else {
+      setQuantity(1)
+      setTypeMeat('0')
       setIsModalShow(true)
       setItemSelected(product)
     }
