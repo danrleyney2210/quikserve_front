@@ -1,13 +1,13 @@
 
 import { useCallback, useState } from "react";
 
-interface IUseLocalStorageProps {
+interface IUseLocalStorageProps<T> {
   storageKey: string;
-  initialValue?: string;
+  initialValue?: T;
 }
 
-export const useLocalStorage = ({ storageKey, initialValue }: IUseLocalStorageProps) => {
-  const [state, setState] = useState(() => {
+export const useLocalStorage = <T,>({ storageKey, initialValue }: IUseLocalStorageProps<T>) => {
+  const [state, setState] = useState<T>(() => {
     try {
       const storageValue = localStorage.getItem(storageKey);
       return storageValue ? JSON.parse(storageValue) : initialValue;
@@ -17,7 +17,7 @@ export const useLocalStorage = ({ storageKey, initialValue }: IUseLocalStoragePr
   });
 
   const setValue = useCallback(
-    (value: unknown) => {
+    (value: T) => {
       try {
         setState(value);
         localStorage.setItem(storageKey, JSON.stringify(value));

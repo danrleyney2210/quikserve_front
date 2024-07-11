@@ -4,79 +4,20 @@ import IconPlus from '../../assets/icons/plus.svg'
 import * as S from './styles'
 import { Button } from '../../components/Atomos/Button'
 import IconClose from '../../assets/icons/close.svg'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react'
-// import { dataAll } from '../home/mock'
-import { useLocalStorage } from '../../hooks/useLocalStorage'
-import { dataAll } from '../home/mock'
-import { Cart, Product } from '../home/types'
-
-
+import { useDetails } from './useDetails'
 
 
 export const Details = () => {
-  const [cart, setCart] = useLocalStorage({ storageKey: '@cart', initialValue: '' })
-  const [typeMeat, setTypeMeat] = useState('0')
-  // const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
-
-
-  const [quantity, setQuantity] = useState(1);
-  const navigate = useNavigate()
-
-  const { idCategory, id } = useParams()
-  const findItem = dataAll.sections.find((i) => i.id === Number(idCategory))!.items.find((i) => i.id === Number(id))!
-
-  function plus() {
-    setQuantity((prev: number) => prev + 1)
-  }
-
-  function less() {
-    if (quantity <= 1) {
-      return
-    }
-    setQuantity((prev: number) => prev - 1)
-  }
-
-  function addToCart() {
-    const newProduct: Product = {
-      id: findItem.id,
-      name: findItem.name,
-      description: findItem.description!,
-      quantity: quantity,
-      meat: Number(typeMeat),
-      price: findItem.price,
-      total: (quantity * findItem.price) + Number(typeMeat),
-    };
-
-    const oldCart: Cart = cart
-
-    setCart({
-      products: [
-        ...(oldCart?.products ?? []),
-        newProduct
-      ]
-    })
-
-    navigate('/');
-  }
-
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTypeMeat(e.target.value);
-  };
-
-
-  // const handleResize = () => {
-  //   setIsMobile(window.innerWidth < 800);
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('resize', handleResize);
-  //   return () => {
-  //     window.removeEventListener('resize', handleResize);
-  //   };
-  // }, []);
-
+  const {
+    findItem,
+    addToCart,
+    handleChange,
+    less,
+    plus,
+    navigate,
+    quantity,
+    typeMeat
+  } = useDetails()
 
   return (
     <S.Wrapper>
@@ -134,7 +75,6 @@ export const Details = () => {
             >Add to Order  $ {(quantity * findItem.price) + Number(typeMeat)}</Button>
           </div>
         </div>
-
       </S.ContentItem>
 
 
