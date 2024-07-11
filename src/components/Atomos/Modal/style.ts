@@ -44,20 +44,24 @@ export const Modal = styled.div`
     color: #333;
     text-align: center;
   }
+
+  .btn-close {
+    border: none;
+    position: absolute;
+    background-color: #fff;
+    right: 16px;
+    top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    z-index: 1000;
+    }
 `;
 
-export const HeaderModal = styled.div`
-  position: absolute;
-  background-color: #fff;
-  right: 16px;
-  top: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 26px;
-  width: 26px;
-  border-radius: 50%;
-`;
+
 
 export const OverleayModal = styled.div``;
 

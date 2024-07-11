@@ -18,17 +18,15 @@ import { Radio } from '../../components/Atomos/Radio'
 import IconLess from '../../assets/icons/less.svg'
 import IconPlus from '../../assets/icons/plus.svg'
 import { Modal } from '../../components/Atomos/Modal'
-import IconClose from '../../assets/icons/close.svg'
-
 
 export const Home = () => {
+  const [isModalShow, setIsModalShow] = useState(false)
   const [cart, setCart] = useLocalStorage({ storageKey: '@cart' })
   const [activeNow, setActiveNow] = useState("Burgers");
   const [typeMeat, setTypeMeat] = useState('0')
   const [itemSelected, setItemSelected] = useState<Item>({} as Item)
   const [data, setData] = useState<IMenu>()
   const [quantity, setQuantity] = useState(1);
-  const [showModal, setShowModal] = useState(false)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 800);
 
 
@@ -42,7 +40,6 @@ export const Home = () => {
 
 
   function plusCart(item: Product) {
-
     const update: Product = {
       ...item,
       quantity: item.quantity + 1,
@@ -96,7 +93,7 @@ export const Home = () => {
     if (isMobile) {
       navigate(`/details/${idCategory}/${id}`)
     } else {
-      setShowModal(true)
+      setIsModalShow(true)
       setItemSelected(product)
     }
   }
@@ -121,7 +118,7 @@ export const Home = () => {
       ]
     })
 
-    setShowModal(!showModal)
+    setIsModalShow(!isModalShow)
   }
 
   const handleResize = () => {
@@ -147,12 +144,10 @@ export const Home = () => {
   }, []);
 
 
-
-
   useEffect(() => {
     getAll();
-
   }, [data])
+
 
   return (
     <Template>
@@ -274,7 +269,7 @@ export const Home = () => {
         </S.Body>
       </S.WrapperMain>
 
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal isOpen={isModalShow} onClose={() => setIsModalShow(false)}>
         <S.ContentItem>
           <div className="content-img">
             {
@@ -284,9 +279,7 @@ export const Home = () => {
                 </S.NotImage>
               )
             }
-            <div className="btn-close" onClick={() => navigate('/')}>
-              <img src={IconClose} alt="" />
-            </div>
+
 
           </div>
           <div className="description">

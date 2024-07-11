@@ -8,22 +8,20 @@ interface IModalProps {
 }
 
 export const Modal = ({ onClose, isOpen, children }: IModalProps) => {
+  if (!isOpen) return null;
+
   return (
     <S.Wrapper>
-      {isOpen && (
-        <S.ContainerModal>
-          <S.Modal>
-            <S.HeaderModal onClick={() => onClose()}>
-              <img src={IconClose} alt="close button" />
-            </S.HeaderModal>
-
-            <S.ModalBody>
-              {children}
-            </S.ModalBody>
-          </S.Modal>
-        </S.ContainerModal>
-      )
-      }
+      <S.ContainerModal>
+        <S.Modal>
+          <button className='btn-close' type='button' onClick={onClose}>
+            <img src={IconClose} alt="close button" />
+          </button>
+          <S.ModalBody>
+            {children}
+          </S.ModalBody>
+        </S.Modal>
+      </S.ContainerModal>
     </S.Wrapper>
   )
 }
